@@ -7,20 +7,18 @@ bool probability(int basis_point)
 	return false;
 }
 
-Character::Character(string character_name = base_name, char_code charac_code = Player, int inHP = 10000, int inMHP = 10000, int instr = 10, int indfs = 10, int incri = 0)//apply stat
+Character::Character(string character_name = base_name, char_code charac_code = Player, int inHP = 10000, int inMHP = 10000, int inatk = 10, int indfs = 10, int incri = 0)//apply stat
 {
-	/*HP = MaxHP = hp;
-	MP = MaxMP = mp;
-	Atk = atk;
-	Dfs = dfs;
-	Spl = spl;
-	Srs = srs;
-	Crt = crt;*///critical is basis point(10 = 0.1%)
+	Stat[HP] = inHP;
+	Stat[MaxHP] = inMHP;
+	Stat[Atk] = inatk;
+	Stat[Dfs] = indfs;
+	Stat[Cri] = incri;//critical is basis point(10 = 0.1%)
 	name = character_name;
 	character_code = charac_code;
 	bool ifbase_name = false;
-	//if(name == base_name)
-	//	ifbase_name = true;
+	if(name == base_name)
+		ifbase_name = true;
 	pre_atk_type = 0;
 	//pre_ene_dmg = 10000;
 }

@@ -12,7 +12,7 @@ extern bool dev_mode = false;
 enum dam_type {Fixedtype = 0, ADtype};
 bool probability(int percent);
 enum Action_type {Phs_attack = 1, Mgc_attack, Escape, Self_heal};
-enum stats {HP = 0, MaxHP, Atk, Dfs, Crt};//Attack, Defense, Critical
+enum stats {HP = 0, MaxHP, Atk, Dfs, Cri};//Attack, Defense, Critical
 enum status_type {nmlStas = 0, slowStas, parzStas, stunStas, deadStas};//normal, slow, paralize, stun, dead
 enum char_code {Player = 0, NPC, Monster};
 class Character
