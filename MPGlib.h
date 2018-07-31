@@ -7,7 +7,7 @@
 #include <string>
 #include <vector>
 using namespace std;
-extern const char base_name[] = "Mona" ;
+extern const char base_name[5] = "Mona" ;
 extern bool dev_mode = false;
 enum dam_type {Fixedtype = 0, ADtype};
 bool probability(int percent);
@@ -24,8 +24,9 @@ protected:
 	short status_duration = 0;//each number is each turn
 	char_code character_code = Player;
 	int pre_atk_type = 0, pre_ene_HP = 10000;
+	stirng name = base_name;
 public:
-	Character(char character_name[20], char_code charac_code = Player);//apply stat
+	Character(const char *character_name = base_name, char_code charac_code = Player);//apply stat
 	
 	void damage_in(int damage_type, int damage);
 	
