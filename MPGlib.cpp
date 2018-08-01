@@ -19,7 +19,6 @@ Character::Character(string character_name = base_name, char_code charac_code = 
 	bool ifbase_name = false;
 	if(name == base_name)
 		ifbase_name = true;
-	pre_atk_type = 0;
 	//pre_ene_dmg = 10000;
 }
 
@@ -62,7 +61,7 @@ int Character::give_HP_by_bp()
 {
 	return (int)((double)HP / (double)MaxHP * 10000.0);
 }
-int Character::give_status()
+state_type Character::give_state()
 {
 	return status;
 }
@@ -74,31 +73,26 @@ void Character::calc_value(Character *Enemy)
 	case ADtype:
 		atk_value += (Stat[Atk] * 0.1 + (pre_ene_HP - Enemy->give_HP_by_bp())) * (Stat[Atk] * 0.3 - (pre_ene_HP - Enemy->give_HP_by_bp())) / abs(Stat[Atk] * 0.3 - (pre_ene_HP - Enemy->give_HP_by_bp()));
 		break;
-	if((100 * Stat[HP] / Stat[MaxHP]) < 30)
-		heal_value = 200;
-	else
-		heal_value = 100;
 }
-/*
-void Character::Status_check()
+
+void Character::State_check(void)
 {
-	status_duration--;
-	if(status_duration <= 0)
+	state_duration--;
+	if(state_duration <= 0)
 	{
-		status_duration = 0;
-		status = nmlStas;
+		state_duration = 0;
+		state = nmlStas;
 	}
 	if (HP == 0)
 	{
-		status = deadStas;
-		status_duration = 999999;
+		state = deadStas;
+		state_duration = 999999;
 	}
 	if (HP > MaxHP)
 		Stat[HP] = Stat[MaxHP];
 }
-*/
 /*
-int Character::AI_action()
+Action_type Character::AI_action()
 {
 	cout << "AI is choosing action..." << endl;//choose action by action's value
 	int priority1, priority2, priority3;
@@ -216,22 +210,28 @@ int Character::AI_action()
 	}
 }
 */
-/*
-int Character::action_choose(Character *Enemy)
+///*
+Action_type Character::action_choose(Character *Enemy)
 {
 	//clear screen
 	cout << "추천도:" << endl;
 	cout << "공격 : " << atk_value << endl;
-	cout << "마법공격 : " << spl_atk_value << endl;
+	//cout << "마법공격 : " << spl_atk_value << endl;
 	cout << "도주 : " << run_value << endl;
-	cout << "자가치유 : " << heal_value << endl;
+	//cout << "자가치유 : " << heal_value << endl;
 	cout << endl;
 	cout << "할 행동을 선택하십시오." << endl;
-	cout << "1: 공격\t2: 마법공격(마나 20)" << endl;
-	cout << "3: 도주\t4: 자가치유(마나 10)" << endl;
+	cout << "1: 공격\t2: 마법공격(비활성화됨)" << endl;
+	cout << "3: 도주\t4: 자가치유(비활성화됨)" << endl;
 	cout << "선택 : ";
 	int action;
     cin >> action;
+	if((action != Phs_attack) || (action != Escape))
+	{
+		cout << "올바르지 않은 선택입니다." << endl;
+		//pause
+		action = this->action_choose(Enemy);
+	}
 	return action;
 }
 //*/
