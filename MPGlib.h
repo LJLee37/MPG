@@ -7,8 +7,8 @@
 #include <string>
 #include <vector>
 using namespace std;
-extern const char base_name[] = "Mona" ;
-extern bool dev_mode = false;
+const char base_name[] = "Mona" ;
+//bool dev_mode = false;
 enum dam_type {Fixedtype = 0, ADtype};
 bool probability(int percent);
 enum Action_type {Phs_attack = 1, Mgc_attack, Escape, Self_heal};
@@ -19,20 +19,20 @@ class Character
 {
 protected:
 	int Stat[5];//HP, MaxJP, Attack, Defense, Critical
-	int atk_value = 100, run_value = 100;//value of action
+	int atk_value = 100, esc_value = 100;//value of action
 	state_type state = nmlStas;
 	short state_duration = 0;//each number is each turn
 	char_code character_code = Player;
 	int pre_atk_type = 0, pre_ene_HP = 10000;
 	string name = base_name;
 public:
-	Character(string character_name = base_name, char_code charac_code = Player, int inHP = 10000, int inMHP = 10000, int instr = 10, int indfs = 10, int incri = 0);//apply stat
+	Character(char_code charac_code = Player, string character_name = base_name, int inHP = 10000, int inMHP = 10000, int instr = 10, int indfs = 10, int incri = 0);//apply stat
 	
-	void damage_in(int damage_type, int damage);
+	void damage_in(dam_type damage_type, int damage);
 	
-	int damage_out(int damage_type);
+	int damage_out(dam_type damage_type);
 	
-	bool HealByRatio(int heal_ratio);
+	bool HealByRatio(int heal_ratio);//parameter is bp
 	
 	bool HealByAmmount(int heal_ammount);
 	
@@ -48,7 +48,7 @@ public:
 
 	Action_type action_choose(Character *Enemy);
 	
-	int AI_test(int v1, int v2, int v4, int mp);
+	//int AI_test(int v1, int v2, int v4, int mp);
 	
 	void Conduct_action(bool player, Character *Enemy);
 	

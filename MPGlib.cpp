@@ -7,13 +7,13 @@ bool probability(int basis_point)
 	return false;
 }
 
-Character::Character(string character_name = base_name, char_code charac_code = Player, int inHP = 10000, int inMHP = 10000, int inatk = 10, int indfs = 10, int incri = 0)//apply stat
+Character::Character(char_code charac_code,string character_name,  int inHP, int inMHP, int inatk, int indfs, int incri)//apply stat
 {
 	Stat[HP] = inHP;
 	Stat[MaxHP] = inMHP;
 	Stat[Atk] = inatk;
 	Stat[Dfs] = indfs;
-	Stat[Cri] = incri;//critical is basis point(10 = 0.1%)
+	Stat[Cri] = incri;//critical is basis point(1 = 0.01%)
 	name = character_name;
 	character_code = charac_code;
 	bool ifbase_name = false;
@@ -22,7 +22,7 @@ Character::Character(string character_name = base_name, char_code charac_code = 
 	//pre_ene_dmg = 10000;
 }
 
-void Character::damage_in(int damage_type, int damage)
+void Character::damage_in(dam_type damage_type, int damage)
 {
 	switch (damage_type)
 	{
@@ -34,7 +34,7 @@ void Character::damage_in(int damage_type, int damage)
 		break;
 	}
 }
-int Character::damage_out(int damage_type)
+int Character::damage_out(dam_type damage_type)
 {
 	switch(damage_type)
 	{
@@ -45,14 +45,14 @@ int Character::damage_out(int damage_type)
 }
 bool Character::HealByRatio(int heal_ratio)
 {
-	if (status == 4)
+	if (state == 4)
 		return false;
-	Stat[HP] += Stat[MaxHP] * (heal_ratio / 100.0);
+	Stat[HP] += Stat[MaxHP] * (heal_ratio / 10000.0);
 	return true;
 }
 bool Character::HealByAmmount(int heal_ammount)
 {
-	if (status == 4)
+	if (state == 4)
 		return false;
 	Stat[HP] += heal_ammount;
 	return true;
@@ -63,22 +63,23 @@ int Character::give_HP_by_bp()
 }
 state_type Character::give_state()
 {
-	return status;
+	return state;
 }
 void Character::calc_value(Character *Enemy)
 {
 	//calculaing action's value
-	switch(pre_atk_type)
+	switch (pre_atk_type)
 	{
 	case ADtype:
 		atk_value += (Stat[Atk] * 0.1 + (pre_ene_HP - Enemy->give_HP_by_bp())) * (Stat[Atk] * 0.3 - (pre_ene_HP - Enemy->give_HP_by_bp())) / abs(Stat[Atk] * 0.3 - (pre_ene_HP - Enemy->give_HP_by_bp()));
 		break;
+	}
 }
 
-void Character::State_check(void)
+void Character::State_check()
 {
 	state_duration--;
-	if(state_duration <= 0)
+	if (state_duration <= 0)
 	{
 		state_duration = 0;
 		state = nmlStas;
@@ -91,6 +92,15 @@ void Character::State_check(void)
 	if (HP > MaxHP)
 		Stat[HP] = Stat[MaxHP];
 }
+
+Action_type Character::AI_action()
+{
+	if (atk_value >= esc_value)
+		return Phs_attack;
+	else
+		return Escape;
+}
+
 /*
 Action_type Character::AI_action()
 {
@@ -210,6 +220,7 @@ Action_type Character::AI_action()
 	}
 }
 */
+
 ///*
 Action_type Character::action_choose(Character *Enemy)
 {
@@ -217,15 +228,17 @@ Action_type Character::action_choose(Character *Enemy)
 	cout << "추천도:" << endl;
 	cout << "공격 : " << atk_value << endl;
 	//cout << "마법공격 : " << spl_atk_value << endl;
-	cout << "도주 : " << run_value << endl;
+	cout << "도주 : " << esc_value << endl;
 	//cout << "자가치유 : " << heal_value << endl;
 	cout << endl;
 	cout << "할 행동을 선택하십시오." << endl;
 	cout << "1: 공격\t2: 마법공격(비활성화됨)" << endl;
 	cout << "3: 도주\t4: 자가치유(비활성화됨)" << endl;
 	cout << "선택 : ";
-	int action;
-    cin >> action;
+	Action_type action;
+	int temp;
+	cin >> temp;
+	action = Action_type(temp);
 	if((action != Phs_attack) || (action != Escape))
 	{
 		cout << "올바르지 않은 선택입니다." << endl;
@@ -257,25 +270,27 @@ int Character::AI_test(int v1, int v2, int v4, int mp)
 	return rtn;
 }
 */
-/*
+
 void Character::Conduct_action(bool player, Character *Enemy)
 {
-	int action;
+	Action_type action;
 	if(player)
 		action = action_choose(Enemy);
 	else
 		action = AI_action();
 	switch(action)
 	{
-	case 1:
+	case Phs_attack:
 		Enemy->damage_in(ADtype,damage_out(ADtype));
 		break;
-	case 2:
+	/*
+	case Mgc_attack:
 		Enemy->damage_in(APtype,damage_out(APtype));
 		Stat[MP] -= 20;
 		break;
-	case 3:
-		//cout << name << "은(는) ";
+		*/
+	case Escape:
+		cout << name << "은(는) ";
 		if(probability(50))
 		{
 			cout << "성공적으로 도망쳤다" << endl;
@@ -288,10 +303,9 @@ void Character::Conduct_action(bool player, Character *Enemy)
 		}
 	}
 }
-*/
-/*
+
+
 void Character::level_up()
 {
     //
 }
-*/
