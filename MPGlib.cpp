@@ -1,7 +1,7 @@
 #include "MPGlib.h"
 bool probability(int basis_point)
 {
-	for (int temp = rand() % 10000; basis_point >= 0; basis_point--)
+	for (int temp = gen(0,10000); basis_point >= 0; basis_point--)
 		if (temp == basis_point)
 			return true;
 	return false;

@@ -61,4 +61,11 @@ public:
     void level_up();
 };
 
+class Player : public Character
+{
+private:
+
+public:
+	
+};
 #endif
