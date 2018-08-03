@@ -7,15 +7,14 @@ bool probability(int basis_point)
 	return false;
 }
 
-Character::Character(char_code charac_code,string character_name,  int inHP, int inMHP, int inatk, int indfs, int incri)//apply stat
+Character::Character(string character_name,  int inHP, int inMHP, int inatk, int indfs, int incri)//apply stat
 {
-	Stat[HP] = inHP;
-	Stat[MaxHP] = inMHP;
-	Stat[Atk] = inatk;
-	Stat[Dfs] = indfs;
-	Stat[Cri] = incri;//critical is basis point(1 = 0.01%)
+	char_stat.HP = inHP;
+	char_stat.MaxHP = inMHP;
+	char_stat.Atk = inatk;
+	char_stat.Dfs = indfs;
+	char_stat.Cri = incri;//critical is basis point(1 = 0.01%)
 	name = character_name;
-	character_code = charac_code;
 	bool ifbase_name = false;
 	if(name == base_name)
 		ifbase_name = true;
@@ -27,10 +26,10 @@ void Character::damage_in(dam_type damage_type, int damage)
 	switch (damage_type)
 	{
 	case Fixedtype:
-		Stat[HP] -= damage;
+		char_stat.HP -= damage;
 		break;
 	case ADtype:
-		Stat[HP] -= ((100 * damage - Stat[Dfs]) / (Stat[Dfs] + 1));
+		char_stat.HP -= ((100 * damage - char_stat.Dfs) / (char_stat.Dfs + 1));
 		break;
 	}
 }
@@ -39,7 +38,7 @@ int Character::damage_out(dam_type damage_type)
 	switch(damage_type)
 	{
 	case ADtype:
-		return (Atk * Atk + 100) / (10000 - Stat[Atk]) * 10000 / Stat[Atk];
+		return (char_stat.Atk * char_stat.Atk + 100) / (10000 - char_stat.Atk) * 10000 / char_stat.Atk;
 		break;
 	}
 }
@@ -47,19 +46,19 @@ bool Character::HealByRatio(int heal_ratio)
 {
 	if (state == 4)
 		return false;
-	Stat[HP] += Stat[MaxHP] * (heal_ratio / 10000.0);
+	char_stat.HP += char_stat.MaxHP * (heal_ratio / 10000.0);
 	return true;
 }
 bool Character::HealByAmmount(int heal_ammount)
 {
 	if (state == 4)
 		return false;
-	Stat[HP] += heal_ammount;
+	char_stat.HP += heal_ammount;
 	return true;
 }
 int Character::give_HP_by_bp()
 {
-	return (int)((double)HP / (double)MaxHP * 10000.0);
+	return (char_stat.HP / char_stat.MaxHP * 10000.0);
 }
 state_type Character::give_state()
 {
@@ -71,7 +70,7 @@ void Character::calc_value(Character *Enemy)
 	switch (pre_atk_type)
 	{
 	case ADtype:
-		atk_value += (Stat[Atk] * 0.1 + (pre_ene_HP - Enemy->give_HP_by_bp())) * (Stat[Atk] * 0.3 - (pre_ene_HP - Enemy->give_HP_by_bp())) / abs(Stat[Atk] * 0.3 - (pre_ene_HP - Enemy->give_HP_by_bp()));
+		atk_value += (char_stat.Atk * 0.1 + (pre_ene_HP - Enemy->give_HP_by_bp())) * (char_stat.Atk * 0.3 - (pre_ene_HP - Enemy->give_HP_by_bp())) / abs(char_stat.Atk * 0.3 - (pre_ene_HP - Enemy->give_HP_by_bp()));
 		break;
 	}
 }
@@ -84,13 +83,13 @@ void Character::State_check()
 		state_duration = 0;
 		state = nmlStas;
 	}
-	if (HP == 0)
+	if (char_stat.HP == 0)
 	{
 		state = deadStas;
 		state_duration = 999999;
 	}
-	if (HP > MaxHP)
-		Stat[HP] = Stat[MaxHP];
+	if (char_stat.HP > char_stat.MaxHP)
+		char_stat.HP = char_stat.MaxHP;
 }
 
 Action_type Character::AI_action()

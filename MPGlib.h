@@ -6,27 +6,33 @@
 #include <stdlib.h>
 #include <string>
 #include <vector>
+#include "Random.h"
 using namespace std;
 const char base_name[] = "Mona" ;
 //bool dev_mode = false;
 enum dam_type {Fixedtype = 0, ADtype};
 bool probability(int percent);
+struct Stat
+{
+	int HP;
+	int MaxHP;
+	int Atk;
+	int Dfs;
+	int Cri;
+};
 enum Action_type {Phs_attack = 1, Mgc_attack, Escape, Self_heal};
-enum stats {HP = 0, MaxHP, Atk, Dfs, Cri};//Attack, Defense, Critical
 enum state_type {nmlStas = 0, slowStas, parzStas, stunStas, deadStas};//normal, slow, paralize, stun, dead
-enum char_code {Player = 0, NPC, Monster};
 class Character
 {
 protected:
-	int Stat[5];//HP, MaxJP, Attack, Defense, Critical
+	Stat char_stat;//HP, MaxJP, Attack, Defense, Critical
 	int atk_value = 100, esc_value = 100;//value of action
 	state_type state = nmlStas;
 	short state_duration = 0;//each number is each turn
-	char_code character_code = Player;
 	int pre_atk_type = 0, pre_ene_HP = 10000;
 	string name = base_name;
 public:
-	Character(char_code charac_code = Player, string character_name = base_name, int inHP = 10000, int inMHP = 10000, int instr = 10, int indfs = 10, int incri = 0);//apply stat
+	Character(string character_name = base_name, int inHP = 10000, int inMHP = 10000, int instr = 10, int indfs = 10, int incri = 0);//apply stat
 	
 	void damage_in(dam_type damage_type, int damage);
 	
