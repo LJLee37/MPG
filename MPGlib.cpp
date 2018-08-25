@@ -1,4 +1,4 @@
-#include "MPGlib.h"
+#include "MPGlib.hpp"
 bool probability(int basis_point)
 {
 	for (int temp = gen(0,10000); basis_point >= 0; basis_point--)
