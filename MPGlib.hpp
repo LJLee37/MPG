@@ -20,14 +20,14 @@ struct Stat
 	int Dfs;
 	int Cri;
 };
-enum Action_type {Phs_attack = 1, Mgc_attack, Escape, Self_heal};
-enum state_type {nmlStas = 0, slowStas, parzStas, stunStas, deadStas};//normal, slow, paralize, stun, dead
+enum class action_t {Phs_attack = 1, Mgc_attack, Escape, Self_heal};
+enum class state_t {normal = 0, slow, parlz, stun, dead};//normal, slow, paralize, stun, dead
 class Character
 {
 protected:
 	Stat char_stat;//HP, MaxJP, Attack, Defense, Critical
 	int atk_value = 100, esc_value = 100;//value of action
-	state_type state = nmlStas;
+	state_t state = state_t::normal;
 	short state_duration = 0;//each number is each turn
 	int pre_atk_type = 0, pre_ene_HP = 10000;
 	string name = base_name;
